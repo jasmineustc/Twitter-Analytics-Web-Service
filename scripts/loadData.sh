@@ -1,5 +1,6 @@
 #!/bin/bash
-for f in q3data/*.csv
+cd /home/ubuntu/q3data
+for f in *.csv
 do
 sudo mysql --local-infile -uroot -p123456 mydb -e "use mydb" -e "
       LOAD DATA LOCAL INFILE '$f'
