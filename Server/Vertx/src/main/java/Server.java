@@ -71,85 +71,127 @@ public class Server extends AbstractVerticle {
 		int q1 = input.indexOf("q1");
 		int q2 = input.indexOf("q2");
 		int q3 = input.indexOf("q3");
+		int q4 = input.indexOf("q4");
+		int q5 = input.indexOf("q5");
+		int q6 = input.indexOf("q6");
 
 		if (q1 != -1) {
-			if (KeyStore1.containsKey(input)) {
-				return "q1," + String.valueOf(KeyStore1.get(input));
-			} else {
-				dateFormat.setTimeZone(TimeZone.getTimeZone("PRT"));
-				String put = dateFormat.format(cal.getTime()) + "\n";
+			return parseQ1(input);
 
-				int index = input.indexOf("&");
-				int keyIndex = input.indexOf("key");
-				if (index != -1 && keyIndex != -1) {
-					String message = input.substring(index + 9);
-					int l = message.length();
-					int n = (int) Math.sqrt(l);
-
-					String xy = input.substring(keyIndex + 4, index);
-					int Z;
-					if (KeyStore1.containsKey(xy)) {
-						Z = KeyStore1.get(xy);
-					} else {
-						BigInteger XY = new BigInteger(xy);
-						String Y = XY.divide(X).toString();
-						Z = Integer.valueOf(Y.substring(Y.length() - 2)) % 25 + 1;
-						KeyStore1.put(xy, Z);
-					}
-					message = getText(message, n);
-					message = moveBit(message, Z);
-					return "q1," + put + message + "\n";
-				} else {
-					return "";
-				}
-			}
 		} else if (q2 != -1) {
-			// q2?userid=1000002559&tweet_time=2014-06-01:17:10:32
-			int idIndex = input.indexOf("userid");
-			int idOff = 7;
-			int timeIndex = input.indexOf("&");
-			int timeOff = 12;
-			if (idIndex != -1 && timeIndex != -1) {
-				String id = input.substring(idIndex + idOff, timeIndex);
-				String time = input.substring(timeIndex + timeOff);
-				time = time.substring(0, 10) + " " + time.substring(11);
-				String dbReq = String.format("%s,%s", id, time);
-				return "q2," + dbReq;
-			} else {
-				return "";
-			}
+			return parseQ2(input);
+
 		} else if (q3 != -1) {
-			// q3?start_date=yyyy-mm-dd&end_date=yyyy-mm-dd&userid=1234567890&n=7
-			int start_date = input.indexOf("start_date");
-			int end_date = input.indexOf("end_date");
-			int userid = input.indexOf("userid");
-			int n = input.indexOf("n=");
-			if (start_date != -1 && end_date != -1 && userid != -1 && n != -1) {
-				String startdate = input.substring(start_date + 11,
-						end_date - 1);
-				String enddate = input.substring(end_date + 9, userid - 1);
-				String id = input.substring(userid + 7, n - 1);
-				String num = input.substring(n + 2);
-				String dbReq = String.format("%s,%s,%s,%s", id, startdate,
-						enddate, num);
-				return "q3," + dbReq;
-			} else {
-				return "";
-			}
+			return parseQ3(input);
+		} else if (q4 != -1){
+			return parseQ4(input);
+
+		} else if (q5 != -1) {
+			return parseQ5(input);
+		} else if (q6 != -1) {
+			return parseQ6(input);
+		}
+		return "shouldn't goes here";
+	}
+	
+	private String parseQ6(String input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	private String parseQ5(String input) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	private String parseQ4(String input) {
+		// q4?hashtag=hashtag&n=number
+		int hashtag = input.indexOf("hashtag=");
+		int n = input.indexOf("n=");
+		if (hashtag != -1 && n != -1) {
+			String tag = input.substring(hashtag + 8, n - 1);
+			String num = input.substring(n + 2);
+			return "q4," + num + "," + tag;
 		} else {
-			// q4?hashtag=hashtag&n=number
-			int hashtag = input.indexOf("hashtag=");
-			int n = input.indexOf("n=");
-			if (hashtag != -1 && n != -1) {
-				String tag = input.substring(hashtag + 8, n - 1);
-				String num = input.substring(n + 2);
-				return "q4," + num + "," + tag;
+			return "";
+		}
+	}
+
+
+	private String parseQ2(String input) {
+		// q2?userid=1000002559&tweet_time=2014-06-01:17:10:32
+		int idIndex = input.indexOf("userid");
+		int idOff = 7;
+		int timeIndex = input.indexOf("&");
+		int timeOff = 12;
+		if (idIndex != -1 && timeIndex != -1) {
+			String id = input.substring(idIndex + idOff, timeIndex);
+			String time = input.substring(timeIndex + timeOff);
+			time = time.substring(0, 10) + " " + time.substring(11);
+			String dbReq = String.format("%s,%s", id, time);
+			return "q2," + dbReq;
+		} else {
+			return "";
+		}
+	}
+	
+	private String parseQ3(String input) {
+		// q3?start_date=yyyy-mm-dd&end_date=yyyy-mm-dd&userid=1234567890&n=7
+		int start_date = input.indexOf("start_date");
+		int end_date = input.indexOf("end_date");
+		int userid = input.indexOf("userid");
+		int n = input.indexOf("n=");
+		if (start_date != -1 && end_date != -1 && userid != -1 && n != -1) {
+			String startdate = input.substring(start_date + 11,
+					end_date - 1);
+			String enddate = input.substring(end_date + 9, userid - 1);
+			String id = input.substring(userid + 7, n - 1);
+			String num = input.substring(n + 2);
+			String dbReq = String.format("%s,%s,%s,%s", id, startdate,
+					enddate, num);
+			return "q3," + dbReq;
+		} else {
+			return "";
+		}
+	}
+
+
+	private String parseQ1(String input) {
+		if (KeyStore1.containsKey(input)) {
+			return "q1," + String.valueOf(KeyStore1.get(input));
+		} else {
+			dateFormat.setTimeZone(TimeZone.getTimeZone("PRT"));
+			String put = dateFormat.format(cal.getTime()) + "\n";
+
+			int index = input.indexOf("&");
+			int keyIndex = input.indexOf("key");
+			if (index != -1 && keyIndex != -1) {
+				String message = input.substring(index + 9);
+				int l = message.length();
+				int n = (int) Math.sqrt(l);
+
+				String xy = input.substring(keyIndex + 4, index);
+				int Z;
+				if (KeyStore1.containsKey(xy)) {
+					Z = KeyStore1.get(xy);
+				} else {
+					BigInteger XY = new BigInteger(xy);
+					String Y = XY.divide(X).toString();
+					Z = Integer.valueOf(Y.substring(Y.length() - 2)) % 25 + 1;
+					KeyStore1.put(xy, Z);
+				}
+				message = getText(message, n);
+				message = moveBit(message, Z);
+				return "q1," + put + message + "\n";
 			} else {
 				return "";
 			}
 		}
 	}
-	
+
+
 	/**
 	 * 
 	 * @param response String, query result
