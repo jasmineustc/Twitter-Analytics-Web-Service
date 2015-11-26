@@ -127,6 +127,8 @@ public class JDBCJava {
 					break;
 				}
 			}
+			stmt.close();
+			rs.close();
 			
 			
 		} catch (Exception e) {
