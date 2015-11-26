@@ -42,23 +42,24 @@ public class Server extends AbstractVerticle {
 
 				// parse key according to different query
 				String key = getQueryKey(uri);
-				// query according to key
-				String response = jdbc.query(key);
-				// build result according to key
-				response = buildResult(response, key);
-				
+				String response = "";
+				if (!key.equals("")) {
+					response = jdbc.query(key);
+					// build result according to key
+					response = buildResult(response, key);
+				}
+
 				req.response()
 						.putHeader("content-type", "text/html; charset=UTF-8")
 						.end(response);
 
 			}).listen(8080);
 	}
-	
-	
+
 	/***************************************************************************
 	 * Parse Key and Build Result
 	 **************************************************************************/
-	
+
 	/**
 	 * parse the request to generate the key in order to query in database
 	 * 
@@ -83,7 +84,7 @@ public class Server extends AbstractVerticle {
 
 		} else if (q3 != -1) {
 			return parseQ3(input);
-		} else if (q4 != -1){
+		} else if (q4 != -1) {
 			return parseQ4(input);
 
 		} else if (q5 != -1) {
@@ -91,20 +92,18 @@ public class Server extends AbstractVerticle {
 		} else if (q6 != -1) {
 			return parseQ6(input);
 		}
-		return "shouldn't goes here";
+		return "";
 	}
-	
+
 	private String parseQ6(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
 	private String parseQ5(String input) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	private String parseQ4(String input) {
 		// q4?hashtag=hashtag&n=number
@@ -118,7 +117,6 @@ public class Server extends AbstractVerticle {
 			return "";
 		}
 	}
-
 
 	private String parseQ2(String input) {
 		// q2?userid=1000002559&tweet_time=2014-06-01:17:10:32
@@ -136,7 +134,7 @@ public class Server extends AbstractVerticle {
 			return "";
 		}
 	}
-	
+
 	private String parseQ3(String input) {
 		// q3?start_date=yyyy-mm-dd&end_date=yyyy-mm-dd&userid=1234567890&n=7
 		int start_date = input.indexOf("start_date");
@@ -144,19 +142,17 @@ public class Server extends AbstractVerticle {
 		int userid = input.indexOf("userid");
 		int n = input.indexOf("n=");
 		if (start_date != -1 && end_date != -1 && userid != -1 && n != -1) {
-			String startdate = input.substring(start_date + 11,
-					end_date - 1);
+			String startdate = input.substring(start_date + 11, end_date - 1);
 			String enddate = input.substring(end_date + 9, userid - 1);
 			String id = input.substring(userid + 7, n - 1);
 			String num = input.substring(n + 2);
-			String dbReq = String.format("%s,%s,%s,%s", id, startdate,
-					enddate, num);
+			String dbReq = String.format("%s,%s,%s,%s", id, startdate, enddate,
+					num);
 			return "q3," + dbReq;
 		} else {
 			return "";
 		}
 	}
-
 
 	private String parseQ1(String input) {
 		if (KeyStore1.containsKey(input)) {
@@ -191,11 +187,12 @@ public class Server extends AbstractVerticle {
 		}
 	}
 
-
 	/**
 	 * 
-	 * @param response String, query result
-	 * @param key String, formant ''
+	 * @param response
+	 *            String, query result
+	 * @param key
+	 *            String, formant ''
 	 * @return
 	 */
 	private String buildResult(String response, String key) {
@@ -204,7 +201,7 @@ public class Server extends AbstractVerticle {
 		} else if (key.indexOf("q2") != -1) {
 			return teamId + response.replace("$fuck$", "\n") + ";";
 		} else if (key.indexOf("q3") != -1) {
-			
+
 			return teamId + response.replace("$fuck$", "\n");
 		} else if (key.indexOf("q4") != -1) {
 			return teamId + response.replace("$fuck$", "\n");
@@ -219,12 +216,10 @@ public class Server extends AbstractVerticle {
 			return "";
 		}
 	}
-	
+
 	/********************************************************************
 	 * Q1 Helper Function
 	 ********************************************************************/
-
-
 
 	/**
 	 * Return the String move key

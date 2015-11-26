@@ -28,7 +28,7 @@ sudo mysql --local-infile -uroot -p123456 mydb -e "use mydb" -e "
 done
 echo finish
 #######################################
-# load q3 data
+# load q4 data
 #######################################
 cd /home/ubuntu/q4data
 for f in *

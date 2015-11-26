@@ -70,37 +70,59 @@ public class JDBCJava {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			stmt = conn.createStatement();
-			String sql = "SELECT * from test3 where userid=\'" + id + "\' ";
+			String sql = "SELECT value from test3 where userid=\'" + id + "\' ";
 
 			ResultSet rs = stmt.executeQuery(sql);
 
-			String result = "";
+			String result = null;
 			while (rs.next()) {
-				result += rs.getString("value");
+				result = rs.getString("value");
 			}
+			
+			// has no posts for this id
+			if (result == null) {
+				result = "";
+			}
+			
 			String[] posts = result.split("#&#");
+//			for (String post:posts) {
+//				System.out.println("post: " + post);
+//			}
 			int n = posts.length;
 			// add positive
+			if (n < num) {
+				num = n;
+			}
+			sb.append("Positive Tweets;");
 			for (int i=0; i<num; i++) {
 				String post = posts[i];
 				String[] ele = post.split(",");
+				if (ele.length<2) {
+					continue;
+				}
 				String time = ele[0];
 				int score = Integer.parseInt(ele[1]);
 				if (score > 0 && time.compareTo(start)>=0 && time.compareTo(end) <= 0) {
-					sb.append(post);
+					sb.append(post + ";");
 				} else if (score < 0) {
 					break;
 				}
 			}
 			
 			// add negative
+			sb.append(";Negative Tweets;");
 			for (int i=0; i<num; i++) {
-				String post = posts[n-i];
+				String post = posts[n-i-1];
 				String[] ele = post.split(",");
+				if (ele.length < 2) {
+					// text is not enough to store all the posts
+					continue;
+				}
 				String time = ele[0];
+				
 				int score = Integer.parseInt(ele[1]);
 				if (score < 0 && time.compareTo(start)>=0 && time.compareTo(end) <= 0) {
-					sb.append(post);
+					sb.append(post + ";");
 				} else if (score > 0) {
 					break;
 				}
