@@ -48,8 +48,34 @@ public class JDBCJava {
 	}
 
 	private String doQ5(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+				key = key.substring(3);
+				Class.forName("com.mysql.jdbc.Driver");
+				stmt = conn.createStatement();
+				String[] keys = key.split(",");
+				String sql,beginId,endId;
+				beginId = keys[0];
+				endId = keys[1];
+				float begin = Float.valueOf(keys[0]);
+				float end = Float.valueOf(keys[1]);
+				if(begin<minId){
+					beginId = minUserid;
+				}
+				if(end>maxId){
+					endId = maxUserid;
+				}
+
+				sql = "SELECT * from test5 where userid=(select min(userid) from test5 where userid>=" +beginId+") or userid=(select max(userid) from test5 where userid<="+endId+");";
+				ResultSet rs = stmt.executeQuery(sql);
+				rs.next();
+				int first = rs.getInt("count");
+				int self = rs.getInt("self");
+				rs.next();
+				int second = rs.getInt("count");
+				return String.valueOf(second-first+self);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 	}
 
 	private String doQ6(String key) {
