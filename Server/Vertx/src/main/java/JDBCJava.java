@@ -12,9 +12,14 @@ public class JDBCJava {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
 
+	
 	// Database credentials
 	static final String USER = "root";
 	static final String PASS = "123456";
+	static final String maxUserid = "2594997268";
+	static final String minUserid = "12";
+	static final float minId = 12;
+	static final double maxId = 2594997268.0;
 	Connection conn = null;
 
 	JDBCJava() throws SQLException {
@@ -48,6 +53,7 @@ public class JDBCJava {
 	}
 
 	private String doQ5(String key) {
+		Statement stmt = null;
 		try {
 				key = key.substring(3);
 				Class.forName("com.mysql.jdbc.Driver");
@@ -76,6 +82,7 @@ public class JDBCJava {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
+			return "excepppp from q5";
 	}
 
 	private String doQ6(String key) {

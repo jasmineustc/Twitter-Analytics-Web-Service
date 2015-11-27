@@ -38,4 +38,4 @@ CREATE TABLE `test5` (
   `count` INT NOT NULL,
   `self` INT NOT NULL
 ) ENGINE=MyiSAM character set utf8mb4;
--- q5 test5 create table end -- 
+-- q5 test5 create table end --
