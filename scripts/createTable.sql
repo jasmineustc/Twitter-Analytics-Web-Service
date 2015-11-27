@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS `test3`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test3` (
   `userid` BIGINT NOT NULL,
-  `value` text
+  `value` longtext
 ) ENGINE=MyiSAM character set utf8mb4;
 -- q3 test3 create table end --
 
