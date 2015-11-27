@@ -28,3 +28,13 @@ CREATE TABLE `test4` (
   `value` text
 ) ENGINE=MyiSAM character set utf8mb4;
 -- q4 test4 create table end --
+
+
+
+-- q5 test5 create table --
+CREATE TABLE `test5` (
+  `userid` BIGINT UNSIGNED NOT NULL,
+  `count` INT NOT NULL,
+  `self` INT NOT NULL
+) ENGINE=MyiSAM;
+-- q5 test5 create table end --
