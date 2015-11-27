@@ -15,7 +15,7 @@ do
     ((counter++))
 done
 
-echo ALL done
+echo Q2 ALL done
 #############################
 # download q3 data
 #############################
@@ -27,7 +27,7 @@ do
     ((counter++))
 done
 
-echo ALL done
+echo Q3 ALL done
 #############################
 # download q4 data
 #############################
@@ -35,4 +35,10 @@ cd /home/ubuntu/q4data
 
 wget https://s3.amazonaws.com/15619yuchengzhangdatas/q4sortnew.csv
 
-echo ALL done
+echo Q4 ALL done
+#############################
+# download q5 data
+#############################
+cd /home/ubuntu/q5data
+wget https://s3.amazonaws.com/mizhangteamproject/q5merge.csv
+echo Q5 ALL done

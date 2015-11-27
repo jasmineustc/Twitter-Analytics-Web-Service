@@ -41,3 +41,17 @@ sudo mysql --local-infile -uroot -p123456 mydb -e "use mydb" -e "
         echo "$f finish" 
 done
 echo finish
+#######################################
+# load q5 data
+#######################################
+cd /home/ubuntu/q5data
+for f in *
+do
+sudo mysql --local-infile -uroot -p123456 mydb -e "use mydb" -e "
+      LOAD DATA LOCAL INFILE '$f' 
+      INTO TABLE test5 
+      FIELDS TERMINATED BY '\t' 
+      LINES TERMINATED BY '\n';"
+        echo "$f finish" 
+done
+echo finish
