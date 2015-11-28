@@ -163,9 +163,7 @@ public class Server extends AbstractVerticle {
 	}
 
 	private String parseQ1(String input) {
-		if (KeyStore1.containsKey(input)) {
-			return "q1," + String.valueOf(KeyStore1.get(input));
-		} else {
+		
 			dateFormat.setTimeZone(TimeZone.getTimeZone("PRT"));
 			String put = dateFormat.format(cal.getTime()) + "\n";
 
@@ -192,7 +190,7 @@ public class Server extends AbstractVerticle {
 			} else {
 				return "";
 			}
-		}
+		
 	}
 
 	/**
