@@ -101,8 +101,16 @@ public class Server extends AbstractVerticle {
 	}
 
 	private String parseQ5(String input) {
-		// TODO Auto-generated method stub
-		return null;
+		// q5?userid_min=u_id&userid_max=u_id
+		//q5,min,max
+		int min = input.indexOf("userid_min=");
+		int max = input.indexOf("userid_max=");
+		if (min != -1 && max != -1) {
+			return "q5," + input.substring(min + 11, max - 1) + ","
+					+ input.substring(max + 11);
+		} else {
+			return "";
+		}
 	}
 
 	private String parseQ4(String input) {
@@ -155,9 +163,7 @@ public class Server extends AbstractVerticle {
 	}
 
 	private String parseQ1(String input) {
-		if (KeyStore1.containsKey(input)) {
-			return "q1," + String.valueOf(KeyStore1.get(input));
-		} else {
+		
 			dateFormat.setTimeZone(TimeZone.getTimeZone("PRT"));
 			String put = dateFormat.format(cal.getTime()) + "\n";
 
@@ -184,7 +190,7 @@ public class Server extends AbstractVerticle {
 			} else {
 				return "";
 			}
-		}
+		
 	}
 
 	/**
