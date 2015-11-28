@@ -56,15 +56,3 @@ sudo mysql --local-infile -uroot -p123456 mydb -e "use mydb" -e "
         echo "$f finish" 
 done
 echo finishQ5
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 78ef7f08b2ef05153ac7f923d0c82c45d14e4afc
