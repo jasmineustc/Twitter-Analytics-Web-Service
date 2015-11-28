@@ -8,7 +8,7 @@ import io.vertx.core.http.HttpClientRequest;
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class Proxy extends AbstractVerticle {
-	private static final int hostnum=2;
+	private static final int hostnum=5;
 	private static String[] DNS = new String[hostnum];
     private int count = 0;
 
@@ -20,12 +20,16 @@ public class Proxy extends AbstractVerticle {
     HttpClient client = vertx.createHttpClient(new HttpClientOptions());
     
     System.out.println("*********** start **************");
-    DNS[0] = "ec2-54-172-96-74.compute-1.amazonaws.com";
-    DNS[1] = "ec2-54-164-78-143.compute-1.amazonaws.com";
+    DNS[0] = "ec2-54-84-28-159.compute-1.amazonaws.com";
+    DNS[1] = "ec2-54-164-72-85.compute-1.amazonaws.com";
+    DNS[2] = "ec2-54-173-80-246.compute-1.amazonaws.com";
+    DNS[3] = "ec2-54-152-122-249.compute-1.amazonaws.com";
+    DNS[4] = "ec2-54-152-224-210.compute-1.amazonaws.com";
     
     vertx.createHttpServer().requestHandler(req -> {
 	      System.out.println("Proxying request: " + req.uri());
 	      HttpClientRequest c_req = client.request(req.method(), 80, DNS[count], req.uri(), c_res -> {
+	    	
 	        System.out.println("Proxying response: " + c_res.statusCode());
 	        req.response().setChunked(true);
 	        req.response().setStatusCode(c_res.statusCode());
@@ -39,6 +43,7 @@ public class Proxy extends AbstractVerticle {
 	      c_req.setChunked(true);
 	      c_req.headers().setAll(req.headers());
 	      req.handler(data -> {
+	    	
 	        System.out.println("Proxying request body " + data.toString("ISO-8859-1"));
 	        c_req.write(data);
 	      });
