@@ -14,7 +14,7 @@ import java.util.TimeZone;
 
 public class Server extends AbstractVerticle {
 	// jdbc client.
-	private JDBCJava jdbc;
+	//private JDBCJava jdbc;
 	// catch
 	private String teamId = "QiDeLongDongQiang,642224241148\n";
 	private BigInteger X = new BigInteger(
@@ -42,7 +42,7 @@ public class Server extends AbstractVerticle {
 	@Override
 	public void start() throws Exception {
 		System.out.println("*********** start **************");
-		jdbc = new JDBCJava();
+		//jdbc = new JDBCJava();
 
 		// connection
 		HttpServer server = vertx.createHttpServer();
@@ -63,7 +63,7 @@ public class Server extends AbstractVerticle {
 					if (key.startsWith("q5")) {
 						response = String.valueOf(q5list.getCount(key));
 					} else {
-						response = jdbc.query(key);
+						response = "";//jdbc.query(key);
 					}
 					
 					// build result according to key
@@ -331,7 +331,7 @@ class UserCountList {
 	private int[] id = null;
 	private int[] count = null;
 	private int size = 0;
-	private static final int TOTAL = 53767998;
+	private static final int TOTAL = 53767998+1;
 	private static final long MINID = 12;
 	private static final long MAXID = 2594997268L;
 	private final int UID_SHIFT = 1000000000;
@@ -339,6 +339,9 @@ class UserCountList {
 	public UserCountList(){
 		id = new int[TOTAL];
 		count = new int[TOTAL];
+		id[0] = 0;
+		count[0] = 0;
+		size++;
 	}
 	
 	public void add(long uid, int sum){
@@ -346,6 +349,24 @@ class UserCountList {
 		id[size] = newid;
 		count[size] = sum;
 		size++;
+	}
+	
+	private int binSearchUidLeft(int[] array, int target, int beginPos, int endPos) {
+		// [...)
+		while (1 < endPos - beginPos) {
+			int mid = (beginPos + endPos) / 2;
+			if (target < array[mid]) {
+				endPos = mid;
+			} else {
+				beginPos = mid;
+			}
+		}
+		if (target == beginPos) {
+			return beginPos - 1;
+		} else {
+			return beginPos;
+		}
+					
 	}
 	
 	private int binSearchUid(int[] array, int target, int beginPos, int endPos) {
@@ -358,8 +379,7 @@ class UserCountList {
 				beginPos = mid;
 			}
 		}
-		return beginPos;
-			
+		return beginPos;			
 	}
 	
 	public int getCount(String q5str) {
@@ -378,8 +398,8 @@ class UserCountList {
 		if(right > MAXID){
 			right = MAXID;
 		}			
-		int leftpos = binSearchUid(id, (int)(left - UID_SHIFT), 0, TOTAL);
-		int rightpos = binSearchUid(id, (int)(right - UID_SHIFT), 0, TOTAL);
+		int leftpos = binSearchUidLeft(id, (int)(left - UID_SHIFT), 1, TOTAL);
+		int rightpos = binSearchUid(id, (int)(right - UID_SHIFT), 1, TOTAL);
 		return count[rightpos] - count[leftpos];
 	}
 }
