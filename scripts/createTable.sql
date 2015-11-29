@@ -39,3 +39,15 @@ CREATE TABLE `test5` (
   `self` INT NOT NULL
 ) ENGINE=MyiSAM character set utf8mb4;
 -- q5 test5 create table end --
+
+-- q6 test5 create table -- 
+DROP TABLE IF EXISTS `test6`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test6` (
+  `tweetid` BIGINT UNSIGNED NOT NULL,
+  `post` text NOT NULL
+) ENGINE=InnoDB character set utf8mb4;
+-- q6 test6 create table end --
+
+
