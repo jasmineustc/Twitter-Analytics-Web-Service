@@ -14,7 +14,7 @@ import java.util.TimeZone;
 
 public class Server extends AbstractVerticle {
 	// jdbc client.
-	//private JDBCJava jdbc;
+	private JDBCJava jdbc;
 	// catch
 	private String teamId = "QiDeLongDongQiang,642224241148\n";
 	private BigInteger X = new BigInteger(
@@ -27,22 +27,11 @@ public class Server extends AbstractVerticle {
 	
 	 // q5 in mem-cache
 	private static UserCountList q5list = initializeQ5("q5merge.csv");
-	
-//	public static void main(String[] args) throws IOException {	
-//		Server s = new Server();
-//		q5list = s.initializeQ5("q5merge.csv");
-//		try {
-//			s.start();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.out.println("error, exception!");
-//		}
-//	}
 
 	@Override
 	public void start() throws Exception {
 		System.out.println("*********** start **************");
-		//jdbc = new JDBCJava();
+		jdbc = new JDBCJava();
 
 		// connection
 		HttpServer server = vertx.createHttpServer();
@@ -63,7 +52,7 @@ public class Server extends AbstractVerticle {
 					if (key.startsWith("q5")) {
 						response = String.valueOf(q5list.getCount(key));
 					} else {
-						response = "";//jdbc.query(key);
+						response = jdbc.query(key);
 					}
 					
 					// build result according to key
@@ -361,7 +350,7 @@ class UserCountList {
 				beginPos = mid;
 			}
 		}
-		if (target == beginPos) {
+		if (target == array[beginPos]) {
 			return beginPos - 1;
 		} else {
 			return beginPos;
