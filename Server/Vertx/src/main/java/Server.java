@@ -26,7 +26,7 @@ public class Server extends AbstractVerticle {
 	HashMap<String, Integer> KeyStore1 = new HashMap<String, Integer>();
 	
 	 // q5 in mem-cache
-	private static UserCountList q5list = initializeQ5("q5merge.csv");
+//	private static UserCountList q5list = initializeQ5("q5merge.csv");
 
 	@Override
 	public void start() throws Exception {
@@ -49,11 +49,12 @@ public class Server extends AbstractVerticle {
 				String key = getQueryKey(uri);
 				String response = "";
 				if (!key.equals("")) {
-					if (key.startsWith("q5")) {
-						response = String.valueOf(q5list.getCount(key));
-					} else {
-						response = jdbc.query(key);
-					}
+//					if (key.startsWith("q5")) {
+//						response = String.valueOf(q5list.getCount(key));
+//					} else {
+//						response = jdbc.query(key);
+//					}
+					response = jdbc.query(key);
 					
 					// build result according to key
 					response = buildResult(response, key);
