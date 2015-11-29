@@ -258,35 +258,7 @@ public class Server extends AbstractVerticle {
 			}
 		
 	}
-
-	/**
-	 * 
-	 * @param response
-	 *            String, query result
-	 * @param key
-	 *            String, formant ''
-	 * @return
-	 */
-	private String buildResult(String response, String key) {
-		if (key.indexOf("q1") != -1) {
-			return teamId + key.substring(3);
-		} else if (key.indexOf("q2") != -1) {
-			return teamId + response.replace("$fuck$", "\n") + ";";
-		} else if (key.indexOf("q3") != -1) {
-			return teamId + response.replace("$fuck$", "\n");
-		} else if (key.indexOf("q4") != -1) {
-			return teamId + response.replace("$fuck$", "\n");
-		} else if (key.indexOf("q5") != -1) {
-			return teamId + response+";";
-		} else if (key.indexOf("q6") != -1) {
-			// TODO: q6
-			return "";
-		} else {
-			// invalid key
-			return "";
-		}
-	}
-
+	
 	/********************************************************************
 	 * Q1 Helper Function
 	 ********************************************************************/
