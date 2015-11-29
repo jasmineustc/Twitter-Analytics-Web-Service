@@ -22,13 +22,26 @@ public class Server extends AbstractVerticle {
 
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	Calendar cal = Calendar.getInstance();
-
+	
 	HashMap<String, Integer> KeyStore1 = new HashMap<String, Integer>();
+	
+	 // q5 in mem-cache
+	private static UserCountList q5list = initializeQ5("q5merge.csv");
+	
+//	public static void main(String[] args) throws IOException {	
+//		Server s = new Server();
+//		q5list = s.initializeQ5("q5merge.csv");
+//		try {
+//			s.start();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.out.println("error, exception!");
+//		}
+//	}
 
 	@Override
 	public void start() throws Exception {
 		System.out.println("*********** start **************");
-		UserCountList q5list = initializeQ5("q5merge.csv");
 		jdbc = new JDBCJava();
 
 		// connection
@@ -275,90 +288,98 @@ public class Server extends AbstractVerticle {
 		return builder.toString();
 	}
 	
-	public UserCountList initializeQ5(String filename) {
+	public static UserCountList initializeQ5(String filename){
 		UserCountList list = new UserCountList();
 		
 		// round 2: read score list
-		BufferedReader reader = new BufferedReader(new FileReader(new File(
-				filename)));
+		BufferedReader reader = null;
 		long uid;
 		int sum;
 		int count = 0;
 		String line;
-		while ((line = reader.readLine()) != null) {
-			count++;
-			if (count % 5000000 == 0) {
-			    System.out.print(count / 5000000 + " ");
+		try {
+			reader = new BufferedReader(new FileReader(new File(filename)));
+			
+			while ((line = reader.readLine()) != null) {
+				count++;
+				if (count % 5000000 == 0) {
+				    System.out.print(count / 5000000 + " ");
+				}
+				String[] seg = line.split("\t");
+				if (seg.length != 3)
+					continue;
+				uid = Long.parseLong(seg[0]);
+				sum = Integer.parseInt(seg[1]);
+				list.add(uid, sum);
 			}
-			String[] seg = line.split("\t");
-			if (seg.length != 3)
-				continue;
-			uid = Long.parseLong(seg[0]);
-			sum = Integer.parseInt(seg[1]);
-			list.add(uid, sum);
+			reader.close();
+		} catch (Exception e) {
+			System.out.print("Loading q5 file failed.");
 		}
-		reader.close();
-		System.out.println("\nQ5: " + count + " loaded! (should be 55678812)");
+
+		
+		System.out.println("\nQ5: " + count + " loaded! (should be 53767998)");
 		return list;
 	}
-	
-	class UserCountList {
-		// maxID 2594997268
-		// minID 12
-		// -2147483648 ~ 2147483647
-		private int[] id = null;
-		private int[] count = null;
-		private int size = 0;
-		private static final int TOTAL = 53767998;
-		private static final long MINID = 12;
-		private static final long MAXID = 2594997268L;
-		private final int UID_SHIFT = 1000000000;
+}
 
-		public UserCountList(){
-			id = new int[TOTAL];
-			count = new int[TOTAL];
-		}
-		
-		public void add(long uid, int sum){
-			int newid = (int)(uid-UID_SHIFT);
-			id[size] = newid;
-			count[size] = sum;
-			size++;
-		}
-		
-		private int binSearchUid(int[] array, int target, int beginPos, int endPos) {
-			// [...)
-			while (1 < endPos - beginPos) {
-				int mid = (beginPos + endPos) / 2;
-				if (target < array[mid]) {
-					endPos = mid;
-				} else {
-					beginPos = mid;
-				}
+
+class UserCountList {
+	// maxID 2594997268
+	// minID 12
+	// -2147483648 ~ 2147483647
+	private int[] id = null;
+	private int[] count = null;
+	private int size = 0;
+	private static final int TOTAL = 53767998;
+	private static final long MINID = 12;
+	private static final long MAXID = 2594997268L;
+	private final int UID_SHIFT = 1000000000;
+
+	public UserCountList(){
+		id = new int[TOTAL];
+		count = new int[TOTAL];
+	}
+	
+	public void add(long uid, int sum){
+		int newid = (int)(uid-UID_SHIFT);
+		id[size] = newid;
+		count[size] = sum;
+		size++;
+	}
+	
+	private int binSearchUid(int[] array, int target, int beginPos, int endPos) {
+		// [...)
+		while (1 < endPos - beginPos) {
+			int mid = (beginPos + endPos) / 2;
+			if (target < array[mid]) {
+				endPos = mid;
+			} else {
+				beginPos = mid;
 			}
-			return beginPos;
-				
 		}
-		
-		public int getCount(String q5str) {
-			String[] seg = q5str.split(",");
+		return beginPos;
 			
-			long left = Long.parseLong(seg[1]);
-			long right = Long.parseLong(seg[2]);
-			
-			return search(left, right);
-		}
+	}
+	
+	public int getCount(String q5str) {
+		String[] seg = q5str.split(",");
 		
-		private int search(long left, long right) {
-			if(left < MINID){
-				left = MINID;
-			}
-			if(right > MAXID){
-				right = MAXID;
-			}			
-			int leftpos = binSearchUid(id, (int)(left - UID_SHIFT), 0, TOTAL);
-			int rightpos = binSearchUid(id, (int)(right - UID_SHIFT), 0, TOTAL);
-			return count[rightpos] - count[leftpos];
+		long left = Long.parseLong(seg[1]);
+		long right = Long.parseLong(seg[2]);
+		
+		return search(left, right);
+	}
+	
+	private int search(long left, long right) {
+		if(left < MINID){
+			left = MINID;
 		}
+		if(right > MAXID){
+			right = MAXID;
+		}			
+		int leftpos = binSearchUid(id, (int)(left - UID_SHIFT), 0, TOTAL);
+		int rightpos = binSearchUid(id, (int)(right - UID_SHIFT), 0, TOTAL);
+		return count[rightpos] - count[leftpos];
 	}
 }
