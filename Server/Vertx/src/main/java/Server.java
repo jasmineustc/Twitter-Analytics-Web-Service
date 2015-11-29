@@ -1,4 +1,3 @@
-import frontend.UserScoreList;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServer;
 
@@ -9,17 +8,14 @@ import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.chrono.MinguoChronology;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TimeZone;
 
 public class Server extends AbstractVerticle {
 	// jdbc client.
 	private JDBCJava jdbc;
 	// catch
-	private HashMap<String, String> map = new HashMap<String, String>();
 	private String teamId = "QiDeLongDongQiang,642224241148\n";
 	private BigInteger X = new BigInteger(
 			"8271997208960872478735181815578166723519929177896558845922250595511921395049126920528021164569045773");
