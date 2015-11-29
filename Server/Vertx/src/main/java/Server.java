@@ -223,8 +223,7 @@ public class Server extends AbstractVerticle {
 		} else if (key.indexOf("q4") != -1) {
 			return teamId + response.replace("$fuck$", "\n");
 		} else if (key.indexOf("q5") != -1) {
-			// TODO: q5
-			return teamId + response + "\n";
+			return teamId + response+";";
 		} else if (key.indexOf("q6") != -1) {
 			// TODO: q6
 			return "";
