@@ -58,7 +58,9 @@ public class Server extends AbstractVerticle {
 					} else if (key.startsWith("q4")) {
 						response =doQ4(key);
 					} else if (key.startsWith("q5")) {
+						// with in memory
 						response = String.valueOf(q5list.getCount(key));
+						// // with mysql
 						//response = doQ5(key);
 					} else if (key.startsWith("q6")) {
 						response = doQ6(key);
