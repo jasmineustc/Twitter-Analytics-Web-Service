@@ -24,9 +24,6 @@ public class Server extends AbstractVerticle {
 	Calendar cal = Calendar.getInstance();
 	
 	HashMap<String, Integer> KeyStore1 = new HashMap<String, Integer>();
-	
-	 // q5 in mem-cache
-	private static UserCountList q5list = initializeQ5("/home/ubuntu/q5data/q5merge.csv");
 
 	@Override
 	public void start() throws Exception {
@@ -59,9 +56,9 @@ public class Server extends AbstractVerticle {
 						response =doQ4(key);
 					} else if (key.startsWith("q5")) {
 						// with in memory
-						response = String.valueOf(q5list.getCount(key));
-						// // with mysql
-						//response = doQ5(key);
+						//response = String.valueOf(q5list.getCount(key));
+						 // with mysql
+						response = doQ5(key);
 					} else if (key.startsWith("q6")) {
 						response = doQ6(key);
 					}
@@ -78,7 +75,7 @@ public class Server extends AbstractVerticle {
 	private String doQ6(String key) {
 		String response = "";
 		response = jdbc.query(key);
-		return response;
+		return teamId + response.replace("$fuck$", "\n") ;
 	}
 
 	private String doQ5(String key) {
@@ -339,86 +336,5 @@ public class Server extends AbstractVerticle {
 		
 		System.out.println("\nQ5: " + count + " loaded! (should be 53767998)");
 		return list;
-	}
-}
-
-
-class UserCountList {
-	// maxID 2594997268
-	// minID 12
-	// -2147483648 ~ 2147483647
-	private int[] id = null;
-	private int[] count = null;
-	private int size = 0;
-	private static final int TOTAL = 53767998+1;
-	private static final long MINID = 12;
-	private static final long MAXID = 2594997268L;
-	private final int UID_SHIFT = 1000000000;
-
-	public UserCountList(){
-		id = new int[TOTAL];
-		count = new int[TOTAL];
-		id[0] = 0;
-		count[0] = 0;
-		size++;
-	}
-	
-	public void add(long uid, int sum){
-		int newid = (int)(uid-UID_SHIFT);
-		id[size] = newid;
-		count[size] = sum;
-		size++;
-	}
-	
-	private int binSearchUidLeft(int[] array, int target, int beginPos, int endPos) {
-		// [...)
-		while (1 < endPos - beginPos) {
-			int mid = (beginPos + endPos) / 2;
-			if (target < array[mid]) {
-				endPos = mid;
-			} else {
-				beginPos = mid;
-			}
-		}
-		if (target == array[beginPos]) {
-			return beginPos - 1;
-		} else {
-			return beginPos;
-		}
-					
-	}
-	
-	private int binSearchUid(int[] array, int target, int beginPos, int endPos) {
-		// [...)
-		while (1 < endPos - beginPos) {
-			int mid = (beginPos + endPos) / 2;
-			if (target < array[mid]) {
-				endPos = mid;
-			} else {
-				beginPos = mid;
-			}
-		}
-		return beginPos;			
-	}
-	
-	public int getCount(String q5str) {
-		String[] seg = q5str.split(",");
-		
-		long left = Long.parseLong(seg[1]);
-		long right = Long.parseLong(seg[2]);
-		
-		return search(left, right);
-	}
-	
-	private int search(long left, long right) {
-		if(left < MINID){
-			left = MINID;
-		}
-		if(right > MAXID){
-			right = MAXID;
-		}			
-		int leftpos = binSearchUidLeft(id, (int)(left - UID_SHIFT), 1, TOTAL);
-		int rightpos = binSearchUid(id, (int)(right - UID_SHIFT), 1, TOTAL);
-		return count[rightpos] - count[leftpos];
 	}
 }

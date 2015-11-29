@@ -24,7 +24,8 @@ public class JDBCJava {
 	Connection conn = null;
 	
 	// q6 variables for plan1
-	//private HashMap <Integer, PriorityQueue<MyRequest>> transitMap = new HashMap<Integer, PriorityQueue<MyRequest>>();
+	private HashMap <Integer, PriorityQueue<MyRequest>> transitMap = new HashMap<Integer, PriorityQueue<MyRequest>>();
+	private HashMap <String, String> tweetMap = new HashMap<String, String>();
 
 	JDBCJava() throws SQLException {
 		conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -95,9 +96,46 @@ public class JDBCJava {
 		String[] keys = key.split(",");
 		Integer tid = Integer.parseInt(keys[0]);
 		String opt = keys[1];
-		//if (opt.equals(""))
+		if (opt.equals("s")) {
+			return doStart(tid);
+		} else if (opt.equals("a")) {
+			String tweetid = keys[2];
+			String tag = keys[3];
+			return doAdd(tid, tweetid, tag);
+			
+		} else if (opt.equals("r")) {
+			String tweetid = keys[2];
+			return doRead(tid, tweetid);
+			
+		} else if (opt.equals("e")) {
+			return doEnd(tid);
+		}
 		
 		return null;
+	}
+
+	private String doEnd( Integer tid) {
+		
+		return null;
+	}
+
+	private String doRead(Integer tid, String tweetid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private String doAdd(Integer tid, String tweetid, String tag) {
+		PriorityQueue<MyRequest> q = transitMap.get(tid);
+		MyRequest newR = new MyRequest(tid, tweetid);
+		synchronized (q) {
+			
+		}
+		return null;
+	}
+
+	private String doStart(Integer tid) {
+		transitMap.put(tid, new PriorityQueue<MyRequest>());
+		return "";
 	}
 
 	private String doQ3(String key) {
@@ -253,5 +291,22 @@ public class JDBCJava {
 			e.printStackTrace();
 		}
 		return sb.toString();
+	}
+	
+	
+	public class MyRequest implements Comparable<MyRequest>{
+		private String id;
+		private int seq;
+		
+		public MyRequest(int seq, String tweetId) {
+			this.seq = seq;
+			this.id = id;
+		}
+	
+
+		@Override
+		public int compareTo(MyRequest o) {
+			return seq-o.seq;
+		}
 	}
 }
