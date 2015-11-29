@@ -42,3 +42,18 @@ echo Q4 ALL done
 cd /home/ubuntu/q5data
 wget https://s3.amazonaws.com/mizhangteamproject/q5merge.csv
 echo Q5 ALL done
+
+
+
+#############################
+# download q6 data
+#############################
+cd /home/ubuntu/q6data
+counter=0
+while [ $counter -le  9 ]
+do
+    wget https://s3.amazonaws.com/cc15619/q6new/q6new-$counter.csv
+    ((counter++))
+done
+
+echo Q6 ALL done
