@@ -3,24 +3,28 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.PriorityQueue;
+
+import org.omg.CORBA.Request;
 
 public class JDBCJava {
 	// JDBC driver name and database URL
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
+	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
 
 	
 	// Database credentials
-	static final String USER = "root";
-	static final String PASS = "123456";
-	static final String maxUserid = "2594997268";
-	static final String minUserid = "12";
-	static final float minId = 12;
-	static final double maxId = 2594997268.0;
+	private static final String USER = "root";
+	private static final String PASS = "123456";
+	private static final String maxUserid = "2594997268";
+	private static final String minUserid = "12";
+	private static final float minId = 12;
+	private static final double maxId = 2594997268.0;
 	Connection conn = null;
+	
+	// q6 variables for plan1
+	//private HashMap <Integer, PriorityQueue<MyRequest>> transitMap = new HashMap<Integer, PriorityQueue<MyRequest>>();
 
 	JDBCJava() throws SQLException {
 		conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -86,7 +90,13 @@ public class JDBCJava {
 	}
 
 	private String doQ6(String key) {
-		// TODO Auto-generated method stub
+		Statement stmt = null;
+		key = key.substring(3);
+		String[] keys = key.split(",");
+		Integer tid = Integer.parseInt(keys[0]);
+		String opt = keys[1];
+		//if (opt.equals(""))
+		
 		return null;
 	}
 

@@ -26,7 +26,7 @@ public class Server extends AbstractVerticle {
 	HashMap<String, Integer> KeyStore1 = new HashMap<String, Integer>();
 	
 	 // q5 in mem-cache
-//	private static UserCountList q5list = initializeQ5("/home/ubuntu/q5data/q5merge.csv");
+	private static UserCountList q5list = initializeQ5("/home/ubuntu/q5data/q5merge.csv");
 
 	@Override
 	public void start() throws Exception {
@@ -49,15 +49,21 @@ public class Server extends AbstractVerticle {
 				String key = getQueryKey(uri);
 				String response = "";
 				if (!key.equals("")) {
-//					if (key.startsWith("q5")) {
-//						response = String.valueOf(q5list.getCount(key));
-//					} else {
-//						response = jdbc.query(key);
-//					}
-					response = jdbc.query(key);
-					
-					// build result according to key
-					response = buildResult(response, key);
+					if (key.startsWith("q1")) {
+						response = doQ1(key);
+					} else if (key.startsWith("q2")) {
+						response =doQ2(key);
+					} else if (key.startsWith("q3")) {
+						response =doQ3(key);
+					} else if (key.startsWith("q4")) {
+						response =doQ4(key);
+					} else if (key.startsWith("q5")) {
+						response = String.valueOf(q5list.getCount(key));
+						//response = doQ5(key);
+					} else if (key.startsWith("q6")) {
+						response = doQ6(key);
+					}
+
 				}
 
 				req.response()
@@ -67,9 +73,48 @@ public class Server extends AbstractVerticle {
 			}).listen(8080);
 	}
 
+	private String doQ6(String key) {
+		String response = "";
+		response = jdbc.query(key);
+		return response;
+	}
+
+	private String doQ5(String key) {
+		String response = "";
+		response = jdbc.query(key);
+		
+		// build result according to key
+		return teamId + response+";";
+	}
+
+	private String doQ4(String key) {
+		String response = "";
+		response = jdbc.query(key);
+		
+		return teamId + response.replace("$fuck$", "\n");
+	}
+
+	private String doQ3(String key) {
+		String response = "";
+		response = jdbc.query(key);
+		return teamId + response.replace("$fuck$", "\n");
+	}
+
+	private String doQ2(String key) {
+		String response = "";
+		response = jdbc.query(key);
+		return teamId + response.replace("$fuck$", "\n") + ";";
+	}
+	
+	private String doQ1(String key) {
+		return teamId + key.substring(3);
+	}
+
 	/***************************************************************************
 	 * Parse Key and Build Result
 	 **************************************************************************/
+
+
 
 	/**
 	 * parse the request to generate the key in order to query in database
@@ -108,6 +153,16 @@ public class Server extends AbstractVerticle {
 
 	private String parseQ6(String input) {
 		// TODO Auto-generated method stub
+		//q6?tid=1&opt=s
+		//q6?tid=1&seq=1&opt=a&tweetid=12312421312&tag=ILOVE15619!123
+		//q6?tid=1&seq=2&opt=r&tweetid=12312421312
+		//q6?tid=1&opt=e
+		
+		//q6,tid,opt,.....
+		//q6,1,s
+		//q6,1,a,1,12312421312,ILOVE15619!123
+		//q6,1,r,2,12312421312
+		//q6,1,e
 		return null;
 	}
 
