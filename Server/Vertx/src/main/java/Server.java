@@ -26,7 +26,7 @@ public class Server extends AbstractVerticle {
 	HashMap<String, Integer> KeyStore1 = new HashMap<String, Integer>();
 	
 	 // q5 in mem-cache
-	private static UserCountList q5list = initializeQ5("q5merge.csv");
+	private static UserCountList q5list = initializeQ5("/home/ubuntu/q5data/q5merge.csv");
 
 	@Override
 	public void start() throws Exception {
