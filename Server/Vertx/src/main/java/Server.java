@@ -189,6 +189,49 @@ public class Server extends AbstractVerticle {
 			return "q6,"+tid+",a,"+seg+","+tweetId+",tag="+tag;		
 		}
 	}
+	
+	public String parseQ6(String input) {
+		//q6?tid=1&opt=s
+		//q6?tid=1&seq=1&opt=a&tweetid=12312421312&tag=ILOVE15619!123
+		//q6?tid=1&seq=2&opt=r&tweetid=12312421312
+		//q6?tid=1&opt=e
+		
+		//q6,tid,opt,.....
+		//q6,1,s
+		//q6,1,a,1,12312421312,ILOVE15619!123
+		//q6,1,r,2,12312421312
+		//q6,1,e
+		int optIndex = input.indexOf("&opt=");
+		int tidIndex = input.indexOf("q6?tid=");
+		String opt = input.substring(optIndex+5,optIndex+6);
+		if(opt.equals("s")){
+			//start
+			String tid = input.substring(tidIndex+7, optIndex);
+			return "q6,"+tid+",s";
+		}else if(opt.equals("e")){
+			// end
+			String tid = input.substring(tidIndex+7, optIndex);
+			return "q6,"+tid+",e";
+		}else if(opt.equals("r")){
+			//read
+			int segIndex = input.indexOf("&seq=");
+			int tweetidInde = input.indexOf("&tweetid=");
+			String tid = input.substring(tidIndex+7, segIndex);
+			String seg = input.substring(segIndex+5, optIndex);
+			String tweetId = input.substring(tweetidInde+9);
+			return "q6,"+tid+",r,"+seg+","+tweetId;
+		}else{
+			// append
+			int segIndex = input.indexOf("&seq=");
+			int tweetidInde = input.indexOf("&tweetid=");
+			int tagIndex = input.indexOf("&tag=");
+			String tid = input.substring(tidIndex+7, segIndex);
+			String seg = input.substring(segIndex+5, optIndex);
+			String tweetId = input.substring(tweetidInde+9,tagIndex);
+			String tag = input.substring(tagIndex+5);
+			return "q6,"+tid+",a,"+seg+","+tweetId+",tag="+tag;		
+		}
+	}
 
 	
 	
