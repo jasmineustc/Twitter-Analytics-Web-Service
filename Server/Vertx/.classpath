@@ -2,7 +2,7 @@
 <classpath>
   <classpathentry kind="src" path="src/main/java" including="**/*.java"/>
   <classpathentry kind="output" path="target/classes"/>
-  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar"/>
   <classpathentry kind="var" path="M2_REPO/io/vertx/vertx-core/3.1.0/vertx-core-3.1.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/io/netty/netty-common/4.0.31.Final/netty-common-4.0.31.Final.jar"/>
