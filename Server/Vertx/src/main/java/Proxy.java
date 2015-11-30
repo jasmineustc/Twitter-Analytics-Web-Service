@@ -55,10 +55,11 @@ public class Proxy extends AbstractVerticle {
 		server.requestHandler(req -> {
 			String uri = req.uri();
 			if (uri.indexOf("q1") == -1 && uri.indexOf("q5") == -1) {
+				int dnsNum = getDnsNum(uri,count);
 				HttpClientRequest c_req = client.request(
                         req.method(),
                         80,
-                        DNS[count],
+                        DNS[dnsNum],
                         req.uri(),
                         c_res -> {
                             req.response().setChunked(true);
@@ -95,7 +96,6 @@ public class Proxy extends AbstractVerticle {
 					}
 					response = buildResult(response, key);
 				}
-
 				req.response()
 						.putHeader("content-type", "text/html; charset=UTF-8")
 						.end(response);
@@ -104,6 +104,30 @@ public class Proxy extends AbstractVerticle {
 			}).listen(8080);
 	}
 
+	/**
+	 * Get the dns num for q2-q4
+	 * @param uri
+	 * @param count
+	 * @return
+	 */
+	private int getDnsNum(String uri,int count){
+		int dnsNum = count;
+		if(uri.indexOf("q2")!=-1){
+			int idIndex = uri.indexOf("userid=");
+			int andIndex = uri.indexOf("&");
+			String userid = uri.substring(idIndex+7, andIndex);
+			dnsNum = userid.hashCode()%10;
+		}else if(uri.indexOf("q6")!=-1){
+			int idIndex = uri.indexOf("tweetid=");
+			int andIndex = uri.indexOf("&tag");
+			String tweetid = uri.substring(idIndex+8, andIndex);
+			dnsNum = tweetid.hashCode()%10;
+		}else{
+			dnsNum = count;
+		}
+		return dnsNum;
+	}
+	
 	/***************************************************************************
 	 * Parse Key and Build Result
 	 **************************************************************************/
